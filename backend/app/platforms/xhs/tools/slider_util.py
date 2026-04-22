@@ -17,9 +17,18 @@ import os
 from typing import List
 from urllib.parse import urlparse
 
-import cv2
 import httpx
 import numpy as np
+
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+
+
+def _require_cv2():
+    if cv2 is None:
+        raise RuntimeError("OpenCV runtime is unavailable in the current container environment")
 
 
 class Slide:
@@ -44,6 +53,7 @@ class Slide:
 
     @staticmethod
     def check_is_img_path(img, img_type, resize):
+        _require_cv2()
         if img.startswith('http'):
             headers = {
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;"
@@ -74,6 +84,7 @@ class Slide:
     @staticmethod
     def clear_white(img):
         """清除图片的空白区域，这里主要清除滑块的空白"""
+        _require_cv2()
         img = cv2.imread(img)
         rows, cols, channel = img.shape
         min_x = 255
@@ -97,6 +108,7 @@ class Slide:
         return img1
 
     def template_match(self, tpl, target):
+        _require_cv2()
         th, tw = tpl.shape[:2]
         result = cv2.matchTemplate(target, tpl, cv2.TM_CCOEFF_NORMED)
         # 寻找矩阵(一维数组当作向量,用Mat定义) 中最小值和最大值的位置
@@ -115,10 +127,12 @@ class Slide:
 
     @staticmethod
     def image_edge_detection(img):
+        _require_cv2()
         edges = cv2.Canny(img, 100, 200)
         return edges
 
     def discern(self):
+        _require_cv2()
         img1 = self.clear_white(self.gap)
         img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
         slide = self.image_edge_detection(img1)

@@ -447,6 +447,52 @@ async def create_default_users():
         # 如果创建失败，可能是权限问题或用户已存在，继续执行（不阻止应用启动）
 
 
+async def sync_table_sequences():
+    """同步 PostgreSQL 自增序列，避免手动插入固定 ID 后发生主键冲突。"""
+    try:
+        engine = _get_async_engine_for_current_loop()
+        async with engine.begin() as conn:
+            from sqlalchemy import text
+
+            result = await conn.execute(
+                text(
+                    """
+                    SELECT table_name, column_name
+                    FROM information_schema.columns
+                    WHERE table_schema = 'public'
+                      AND column_default LIKE 'nextval(%'
+                    """
+                )
+            )
+            serial_columns = result.fetchall()
+
+            for table_name, column_name in serial_columns:
+                seq_result = await conn.execute(
+                    text("SELECT pg_get_serial_sequence(:table_name, :column_name)"),
+                    {"table_name": table_name, "column_name": column_name},
+                )
+                seq_name = seq_result.scalar()
+                if not seq_name:
+                    continue
+
+                await conn.execute(
+                    text(
+                        f"""
+                        SELECT setval(
+                            '{seq_name}',
+                            COALESCE((SELECT MAX({column_name}) FROM {table_name}), 1),
+                            (SELECT COUNT(*) > 0 FROM {table_name})
+                        )
+                        """
+                    )
+                )
+
+            if serial_columns:
+                logger.info(f"✅ 已同步 {len(serial_columns)} 个自增序列")
+    except Exception as e:
+        logger.warning(f"⚠️ 自增序列同步失败: {e}")
+
+
 async def close_db():
     """关闭所有数据库连接"""
     # 关闭所有异步引擎
@@ -492,6 +538,7 @@ async def seed_initial_data():
     try:
         # 创建默认用户
         await create_default_users()
+        await sync_table_sequences()
         
         # 可以在这里添加其他种子数据的插入逻辑
         # 例如：默认目的地、活动类型等

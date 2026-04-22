@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL 数据库（仅内网）
   postgres:
@@ -46,7 +44,7 @@ services:
       - ./logs:/app/logs
     networks:
       - skyroam-network
-    command: bash -lc "uvicorn main:app --host 0.0.0.0 --port ${PORT} --reload"
+    command: bash -lc "uvicorn main:app --host 0.0.0.0 --port $${PORT:-8001} --reload"
 
   # Celery Worker（仅内网）
   celery-worker:
@@ -118,9 +116,11 @@ services:
       dockerfile: Dockerfile
     container_name: skyroam-frontend
     environment:
-      REACT_APP_API_URL: http://backend:8001
+      REACT_APP_API_URL: /api/v1
       HOST: 0.0.0.0
       PORT: 3000
+      WDS_SOCKET_HOST: localhost
+      WDS_SOCKET_PORT: 13000
     ports:
       - "13000:3000"
     depends_on:
