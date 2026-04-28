@@ -93,7 +93,7 @@ const SystemUpgradeNotice: React.FC<SystemUpgradeNoticeProps> = ({ visible, onCl
           <Badge.Ribbon text="v2.0 升级中" color="blue">
             <div className="upgrade-version-card">
               <Title level={4}>
-                <StarOutlined /> 洛曦云旅Agent 全新升级
+                <StarOutlined /> 智枢云台Agent 全新升级
               </Title>
               <Paragraph>
                 为了给您提供更好的服务体验，我们正在进行系统升级。本次升级将带来更智能的AI推荐、更流畅的用户体验和更丰富的功能特性。

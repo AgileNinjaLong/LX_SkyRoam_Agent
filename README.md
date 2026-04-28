@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# ✨ 洛曦 云旅Agent ✨
+# ✨ 智枢 云台Agent ✨
 
 [![][python]][python]
 [![][github-release-shield]][github-release-link]

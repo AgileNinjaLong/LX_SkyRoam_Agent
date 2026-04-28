@@ -6,12 +6,20 @@
 const RAW_API_BASE =
   process.env.REACT_APP_API_BASE_URL ||
   process.env.REACT_APP_API_URL ||
-  'http://localhost:8001';
+  '/api/v1';
+
+const trimmedBase = RAW_API_BASE.replace(/\/$/, '');
+const isAbsoluteBase = /^https?:\/\//i.test(trimmedBase);
+
+// 浏览器无法解析 Docker 服务名，遇到这类容器内地址时回退为同源代理
+const safeBase = isAbsoluteBase && /:\/\/backend(?::|\/|$)/i.test(trimmedBase)
+  ? '/api/v1'
+  : trimmedBase;
 
 // 规范化基础路径，确保包含 /api/v1
-const normalizedBase = RAW_API_BASE.endsWith('/api/v1')
-  ? RAW_API_BASE
-  : `${RAW_API_BASE.replace(/\/$/, '')}/api/v1`;
+const normalizedBase = safeBase.endsWith('/api/v1')
+  ? safeBase
+  : `${safeBase}/api/v1`;
 
 export const API_BASE_URL = normalizedBase;
 
@@ -43,7 +51,7 @@ export const API_ENDPOINTS = {
   TRAVEL_PLAN_TEXT_PLAN: (id: number) => `/travel-plans/${id}/text-plan`,
   
   // 目的地
-  DESTINATIONS: '/destinations',
+  DESTINATIONS: '/destinations/',
   DESTINATION_DETAIL: (id: number) => `/destinations/${id}`,
   
   // 用户

@@ -190,7 +190,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <img src="/images/logo.png" alt="Logo" style={{ width: 24, height: 24 }} />
             </div>
             <Title level={3} className="brand-title gradient-text" style={{ margin: 0, fontWeight: '800' }}>
-              洛曦 云旅
+              智枢 云台
             </Title>
           </div>
 
@@ -298,7 +298,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               rel="noopener noreferrer"
               style={{ color: 'inherit', textDecoration: 'none' }}
             >
-              洛曦 云旅Agent
+              智枢 云台Agent
             </a>
             . 智能旅游攻略生成器
           </p>

@@ -37,7 +37,7 @@
     "postcss": "^8.4.32"
   },
   "scripts": {
-    "start": "set \"REACT_APP_API_BASE_URL=http://47.96.136.235:56789/api/v1\" && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -63,5 +63,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8001"
+  "proxy": "http://backend:8001"
 }

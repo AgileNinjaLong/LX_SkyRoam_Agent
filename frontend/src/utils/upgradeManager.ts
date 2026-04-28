@@ -38,7 +38,7 @@ class UpgradeManager {
     enabled: true,
     status: 'completed',
     title: '系统升级完成',
-    description: '洛曦云旅Agent已完成重大版本升级',
+    description: '智枢云台Agent已完成重大版本升级',
     features: [
       {
         title: '🚀 AI 智能引擎升级',
