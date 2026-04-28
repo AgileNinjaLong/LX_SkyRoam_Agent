@@ -17,6 +17,16 @@ class DataProcessor:
             "携程", "去哪儿", "飞猪", "booking.com", 
             "agoda", "tripadvisor", "官方"
         ]
+        # 先做一层保守过滤，剔除明显不适合进入行程的 POI。
+        self.poi_name_blacklist = {
+            "公厕", "厕所", "卫生间", "洗手间", "atm", "自动取款机", "取款机",
+            "办公厅", "办事大厅", "派出所", "交警", "公安", "政府", "市政府",
+            "市委", "政协", "婚姻登记处", "民政局", "营业厅", "银行", "工商银行",
+        }
+        self.poi_address_blacklist = {
+            "办事大厅", "办公厅", "政府", "派出所", "交警", "公安",
+            "婚姻登记处", "营业厅", "银行", "atm", "自动取款机",
+        }
     
     async def process_data(
         self, 
@@ -265,6 +275,10 @@ class DataProcessor:
         # 基本验证
         if not item.get("name") and not item.get("title"):
             return False
+
+        if data_type in {"attractions", "restaurants"} and self._is_invalid_poi(item):
+            logger.warning(f"{data_type} 数据命中过滤规则，记录将被丢弃: {item.get('name')}")
+            return False
         
         # 价格验证
         price_fields = ["price", "price_per_night"]
@@ -288,3 +302,37 @@ class DataProcessor:
             return False
         
         return True
+
+    def _is_invalid_poi(self, item: Dict[str, Any]) -> bool:
+        """过滤明显不适合作为景点/餐厅的 POI。"""
+        name = str(item.get("name") or item.get("title") or "").strip().lower()
+        address = str(item.get("address") or "").strip().lower()
+        category = str(
+            item.get("category")
+            or item.get("cuisine")
+            or item.get("cuisine_type")
+            or item.get("typecode")
+            or ""
+        ).strip().lower()
+
+        if not name:
+            return True
+
+        for keyword in self.poi_name_blacklist:
+            if keyword.lower() in name:
+                return True
+
+        for keyword in self.poi_address_blacklist:
+            if keyword.lower() in address:
+                return True
+
+        # 名称过于泛化且缺少有效标签时，基本可以判断为脏 POI。
+        if name.startswith("景点") and len(name) <= 6:
+            return True
+
+        # 餐厅/景点分类若明显落在政务、金融、公共服务，也直接过滤。
+        invalid_category_keywords = ("政府", "金融", "公共设施", "公共服务", "政务", "银行", "厕所")
+        if any(keyword in category for keyword in invalid_category_keywords):
+            return True
+
+        return False

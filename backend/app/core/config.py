@@ -89,8 +89,8 @@ class Settings(BaseSettings):
     MAP_API_KEY: str = os.getenv("MAP_API_KEY", "")      # Google Maps
     
     # MCP服务配置
-    BAIDU_MCP_ENDPOINT: str = os.getenv("BAIDU_MCP_ENDPOINT", "http://localhost:3001")  # 百度地图MCP服务端口
-    AMAP_MCP_ENDPOINT: str = os.getenv("AMAP_MCP_ENDPOINT", "http://localhost:3002")  # 高德地图MCP服务
+    BAIDU_MCP_ENDPOINT: str = os.getenv("BAIDU_MCP_ENDPOINT", "http://baidu-mcp-api:3001")  # 百度地图MCP服务端口
+    AMAP_MCP_ENDPOINT: str = os.getenv("AMAP_MCP_ENDPOINT", "http://amap-mcp-api:3002")  # 高德地图MCP服务
     MCP_TIMEOUT: int = os.getenv("MCP_TIMEOUT", 30)  # MCP服务超时时间（秒）
 
     # MCP服务API密钥（通过环境变量传递给MCP服务）
@@ -122,8 +122,8 @@ class Settings(BaseSettings):
     
     # 高德地图MCP服务配置
     AMAP_MCP_MODE: str = os.getenv("AMAP_MCP_MODE", "http")  # 高德地图MCP模式: "http" 或 "sse"
-    AMAP_MCP_HTTP_URL: str = os.getenv("AMAP_MCP_HTTP_URL", "http://localhost:3002/mcp")  # Streamable HTTP方式
-    AMAP_MCP_SSE_URL: str = os.getenv("AMAP_MCP_SSE_URL", "http://localhost:3002/sse")   # SSE方式
+    AMAP_MCP_HTTP_URL: str = os.getenv("AMAP_MCP_HTTP_URL", "http://amap-mcp-api:3002/mcp")  # Streamable HTTP方式
+    AMAP_MCP_SSE_URL: str = os.getenv("AMAP_MCP_SSE_URL", "http://amap-mcp-api:3002/sse")   # SSE方式
 
     # 爬虫配置
     SCRAPY_USER_AGENT: str = os.getenv("SCRAPY_USER_AGENT", "LX-SkyRoam-Agent/1.0")
@@ -157,7 +157,7 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_TASKS: int = os.getenv("MAX_CONCURRENT_TASKS", 10)
 
     # 小红书服务配置
-    XHS_API_BASE: str = os.getenv("XHS_API_BASE", "http://127.0.0.1:8002")
+    XHS_API_BASE: str = os.getenv("XHS_API_BASE", "http://xhs-api:8002")
 
     # 数据源配置
     DATA_SOURCES: List[str] = [

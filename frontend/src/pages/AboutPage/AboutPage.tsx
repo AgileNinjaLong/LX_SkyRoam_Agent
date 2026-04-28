@@ -67,7 +67,7 @@ const AboutPage: React.FC = () => {
               <div>
                 <Title level={1} style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
                   <img src="/images/logo.png" alt="Logo" style={{ width: '36px', height: '36px', marginRight: '12px' }} />
-                  洛曦 云旅Agent
+                  智枢 云台Agent
                 </Title>
                 <Title level={3} type="secondary" style={{ margin: '8px 0' }}>
                   智能旅游攻略生成器
@@ -75,7 +75,7 @@ const AboutPage: React.FC = () => {
               </div>
               
               <Paragraph style={{ fontSize: '16px', lineHeight: '1.8' }}>
-                洛曦 云旅Agent 是一款基于人工智能技术的智能旅行规划助手。
+                智枢 云台Agent 是一款基于人工智能技术的智能旅行规划助手。
                 我们致力于为每一位旅行者提供个性化、专业化的旅行方案规划服务，
                 让每一次旅行都成为美好的回忆。
               </Paragraph>

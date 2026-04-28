@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
           <div style={{ width: 68, height: 68, borderRadius: '50%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(102,126,234,0.35)' }}>
             <img src="/images/logo.png" alt="Logo" style={{ width: 36, height: 36 }} />
           </div>
-          <Title level={2} className="gradient-text" style={{ margin: 0, marginLeft: 14 }}>洛曦 云旅Agent</Title>
+          <Title level={2} className="gradient-text" style={{ margin: 0, marginLeft: 14 }}>智枢 云台Agent</Title>
         </div>
         <Paragraph style={{ textAlign: 'center' }}>登录以继续智能旅行规划</Paragraph>
         <Form layout="vertical" onFinish={onFinish}>
